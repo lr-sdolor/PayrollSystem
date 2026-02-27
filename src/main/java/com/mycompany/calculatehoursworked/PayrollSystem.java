@@ -170,8 +170,7 @@ public class PayrollSystem {
             hours = adjustedMinutes / 60.0; // convert adjusted minutes into payable hours
         }
         
-        // [READDED] round hours: rounds hours to 2 decimal places for payroll accuracy
-        hours = Math.round(hours * 100.0)/100.0;
+        
         // return final payable hours, capped at 8
         return Math.min(hours, 8.0);
     }   
@@ -216,11 +215,11 @@ public class PayrollSystem {
         System.out.println("Employee No.: " + empNo);
         System.out.println("Employee: " + lastName + ", " + firstName);
         System.out.println("Birthday: " + birthday);
-        System.out.println("Cutoff Date: " + monthName + " 1 to 15");
+        System.out.println("\n===== Cutoff Date: " + monthName + " 1 to 15 ====");
         System.out.println("Total Hours Worked: " + firstHalf);
         System.out.println("Gross Salary: " + gross1);
         System.out.println("Net Salary: " + net1);
-        System.out.println("Cutoff Date: " + monthName + " 16 to " + monthDays);
+        System.out.println("\n==== Cutoff Date: " + monthName + " 16 to " + monthDays + " ====");
         System.out.println("Total Hours Worked: " + secondHalf);
         System.out.println("Gross Salary: " + gross2);
         System.out.println("Deductions");
