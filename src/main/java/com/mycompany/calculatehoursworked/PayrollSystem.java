@@ -170,6 +170,8 @@ public class PayrollSystem {
             hours = adjustedMinutes / 60.0; // convert adjusted minutes into payable hours
         }
         
+        // [READDED] round hours: rounds hours to 2 decimal places for payroll accuracy
+        hours = Math.round(hours * 100.0)/100.0;
         // return final payable hours, capped at 8
         return Math.min(hours, 8.0);
     }   
