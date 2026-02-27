@@ -417,6 +417,9 @@ public class PayrollSystem {
                 scanner.nextLine();
                 if (choice == 2) {
                     break;
+                } else if (choice != 1) {
+                    System.out.println("Invalid choice. Please input 1 or 2 only.");
+                    continue;
                 }
                 
                 System.out.println("\n1. One Employee");
@@ -426,6 +429,9 @@ public class PayrollSystem {
                 scanner.nextLine();
                 if (subChoice == 3) {
                     break;
+                } else if(subChoice != 1 && subChoice != 2) {
+                    System.out.println("Invalid choice. Please input 1-3 only.");
+                    continue;
                 }
                 
                 if(subChoice == 1) {
