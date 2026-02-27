@@ -29,7 +29,7 @@ import java.util.Scanner;
 // all program logic exists inside this class
 public class PayrollSystem {
     
-    // DEDUCTION METHODS
+    // ==== METHODS ====
     // SSS Contribution
     // public -> accessible everywhere
     // static -> can run without creating an object
@@ -337,7 +337,7 @@ public class PayrollSystem {
         }
     }
     
-    // main program
+    // ==== MAIN PROGRAM ====
     // executio of the Java program starts here
     public static void main(String[] args) {
         // create scanner object to allow keyboard input
