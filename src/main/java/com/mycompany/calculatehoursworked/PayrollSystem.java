@@ -138,15 +138,15 @@ public class PayrollSystem {
         double net1 = roundMoney(gross1);
         double net2 = roundMoney(monthlyGross - totalDeductions);
         
-        System.out.println("\n================ "+monthName + " ================");
+        System.out.println("\n================ "+ monthName + " ================");
         System.out.println("Employee No.: " + empNo);
         System.out.println("Employee: " + lastName + ", " + firstName);
         System.out.println("Birthday: " + birthday);
-        System.out.println("\n==== First Cut-Off ====");
+        System.out.println("\nCutoff Date: " + monthName + "1 to 15");
         System.out.println("Total Hours Worked: " + firstHalf);
         System.out.println("Gross Salary: " + gross1);
         System.out.println("Net Salary: " + net1);
-        System.out.println("\n==== Second Cut-Off ====");
+        System.out.println("\nCutoff Date: " + monthName + "16 to " + monthDays);
         System.out.println("Total Hours Worked: " + secondHalf);
         System.out.println("Gross Salary: " + gross2);
         System.out.println("\n==== Breakdown of Deductions ====");
