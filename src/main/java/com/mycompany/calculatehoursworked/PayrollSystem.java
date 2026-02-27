@@ -159,11 +159,10 @@ public class PayrollSystem {
             return 8.0;
             }
         
-        hours = minutesWorked / 60.0; // convert adjusted minutes into payable hours
-        
+        hours = Math.min(hours, 8.0);
         
         // return final payable hours, capped at 8
-        return Math.min(hours, 8.0);
+        return Math.round((hours * 100.0)/100.0);
     }   
     
     // helper method for displaying payroll information aka Display Payroll Module
