@@ -96,13 +96,13 @@ public class PayrollSystem {
         else if (taxableIncome <= 33332) // second income bracket
             return (taxableIncome - 20833) * 0.20; // tax only applies to excess over 20833
         else if (taxableIncome <= 66666) // third income bracket
-            return 2500 + (taxableIncome - 33333) * 0.25; // fixed base tax + 25% of excess
+            return 2500 + ((taxableIncome - 33333) * 0.25); // fixed base tax + 25% of excess
         else if (taxableIncome <= 166666) // fourth income bracket
-            return 10833 + (taxableIncome - 66667) * 0.30; // base tax plus 30% of excess income
+            return 10833 + ((taxableIncome - 66667) * 0.30); // base tax plus 30% of excess income
         else if (taxableIncome <= 666666) // fifth income bracket
-            return 40833.33 + (taxableIncome - 166667) * 0.32; // base tax plus 32% of excess
+            return 40833.33 + ((taxableIncome - 166667) * 0.32); // base tax plus 32% of excess
         else // highest tax bracket
-            return 200833.33 + (taxableIncome - 666667) * 0.35; // base tax plus 35% of remaining income
+            return 200833.33 + ((taxableIncome - 666667) * 0.35); // base tax plus 35% of remaining income
     }
     
     // Money Rounding Method
@@ -201,7 +201,7 @@ public class PayrollSystem {
         double sss = roundMoney(computeSSS(monthlyGross));
         double phil = roundMoney(computePhilHealth(monthlyGross));
         double pagibig = roundMoney(computePagIbig(monthlyGross));
-        double tax = roundMoney(computeWithholdingTax(monthlyGross - (sss + phil + pagibig)));
+        double tax = roundMoney(computeWithholdingTax(monthlyGross));
         
         // add all deductions together
         double totalDeductions = roundMoney(sss + phil + pagibig + tax);
