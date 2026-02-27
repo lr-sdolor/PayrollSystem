@@ -208,7 +208,7 @@ public class PayrollSystem {
         
         // net pay for cutoffs
         double net1 = roundMoney(gross1);
-        double net2 = roundMoney(monthlyGross - totalDeductions); // net pay after deductions
+        double net2 = roundMoney(gross2 - totalDeductions); // net pay after deductions
         
         // display employee and payroll information
         System.out.println("\n================ "+ monthName + " ================");
