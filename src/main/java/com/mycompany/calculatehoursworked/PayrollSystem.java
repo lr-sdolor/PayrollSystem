@@ -135,7 +135,8 @@ public class PayrollSystem {
         double pagibig = roundMoney(computePagIbig(monthlyGross));
         double tax = roundMoney(computeWithholdingTax(monthlyGross - (sss + phil + pagibig)));
         double totalDeductions = roundMoney(sss + phil + pagibig + tax);
-        double net = roundMoney(monthlyGross - totalDeductions);
+        double net1 = roundMoney(gross1);
+        double net2 = roundMoney(monthlyGross - totalDeductions);
         
         System.out.println("\n================ "+monthName + " ================");
         System.out.println("Employee No.: " + empNo);
@@ -144,6 +145,7 @@ public class PayrollSystem {
         System.out.println("\n==== First Cut-Off ====");
         System.out.println("Total Hours Worked: " + firstHalf);
         System.out.println("Gross Salary: " + gross1);
+        System.out.println("Net Salary: " + net1);
         System.out.println("\n==== Second Cut-Off ====");
         System.out.println("Total Hours Worked: " + secondHalf);
         System.out.println("Gross Salary: " + gross2);
@@ -153,7 +155,7 @@ public class PayrollSystem {
         System.out.println("Pag-IBIG: " + pagibig);
         System.out.println("Tax: " + tax);
         System.out.println("Total Deductions: " + totalDeductions);
-        System.out.println("\nNet Salary: " + net);
+        System.out.println("Net Salary: " + net2);
     }
     
     // helper method for computing attendance
