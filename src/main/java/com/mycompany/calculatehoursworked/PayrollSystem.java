@@ -366,7 +366,7 @@ public class PayrollSystem {
         String attFile = "src\\main\\java\\com\\mycompany\\calculatehoursworked\\attendance_record.csv";
         
         // employee flow
-        if(username.equals("employee")) { // check if logged-in user is an employee
+        if(username.equals("employee") && password.equals("12345")) { // check if logged-in user is an employee
             while(true) { // infinite loop until user exits
                 // show employee menu or options
                 System.out.println("\n1. Enter Employee Number");
@@ -409,7 +409,7 @@ public class PayrollSystem {
             }
         }
         // check if payroll staff logged in
-        if(username.equals("payroll_staff")) {
+        if(username.equals("payroll_staff") && password.equals("12345")) {
             while(true) {
                 System.out.println("\n1. Process Payroll");
                 System.out.println("\n2. Exit Program");
