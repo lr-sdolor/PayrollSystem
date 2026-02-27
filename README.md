@@ -89,22 +89,6 @@ CSV handling includes:
 
 ---
 
-## Project Structure
-
-PayrollSystem
-│
-├── src/main/java/com/mycompany/calculatehoursworked
-│ ├── PayrollSystem.java
-│ ├── CalculateHoursWorked.java
-│ ├── CalculateDeductions.java
-│
-├── employee_details.csv
-├── attendance_record.csv
-├── pom.xml
-└── README.md
-
----
-
 ## System Requirements
 
 To run the program, the following are required:
