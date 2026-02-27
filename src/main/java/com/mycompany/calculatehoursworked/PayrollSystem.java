@@ -70,8 +70,8 @@ public class PayrollSystem {
     // grossSalary -> input parameter
     public static double computePhilHealth(double grossSalary) {
         double premium = grossSalary * 0.03; // compute 3% of monthly basic/gross
-        if (premium <= 10000) premium = 300; // check if computed premium is below minimum threshold then force minimum contribution rule
-        else if (premium >= 60000) premium = 1800; // check if computed premium exceeds maximum threshold then apply maximum contribution rule
+        if (grossSalary <= 10000) premium = 300; // check if computed premium is below minimum threshold then force minimum contribution rule
+        else if (grossSalary >= 60000) premium = 1800; // check if computed premium exceeds maximum threshold then apply maximum contribution rule
         return premium / 2; // employee only pays 50% of total premium
     }
 
