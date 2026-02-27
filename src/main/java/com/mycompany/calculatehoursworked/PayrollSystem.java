@@ -123,8 +123,6 @@ public class PayrollSystem {
         LocalTime graceTime = LocalTime.of(8, 10); // grace period allowed until 8:10
         // created LocalTime object representing 5:00 PM
         LocalTime cutoffTime = LocalTime.of(17, 0); // official work end time
-        // [NEW] official start time
-        LocalTime officialStart = LocalTime.of(8, 0);
         
         // apply 17:00 cut off and check if employee logged out after 5:00 PM
         if (logout.isAfter(cutoffTime)) {
@@ -158,17 +156,10 @@ public class PayrollSystem {
         // check if login time is not after grace period
         // meaning employee arrived on or before 8:10 AM
         if (!login.isAfter(graceTime)) {
-            // [NEW] recompute work duration assuming login = 8:00 AM
-            long adjustedMinutes = Duration.between(officialStart, logout).toMinutes();
-            
-            // reapply lunch deduction after recomputing work duration
-            if(adjustedMinutes > 60) {
-                adjustedMinutes -= 60;
-            } else {
-                adjustedMinutes = 0;
+            return 8.0;
             }
-            hours = adjustedMinutes / 60.0; // convert adjusted minutes into payable hours
-        }
+        
+        hours = minutesWorked / 60.0; // convert adjusted minutes into payable hours
         
         
         // return final payable hours, capped at 8
