@@ -142,19 +142,19 @@ public class PayrollSystem {
         System.out.println("Employee No.: " + empNo);
         System.out.println("Employee: " + lastName + ", " + firstName);
         System.out.println("Birthday: " + birthday);
-        System.out.println("\nCutoff Date: " + monthName + "1 to 15");
+        System.out.println("Cutoff Date: " + monthName + " 1 to 15");
         System.out.println("Total Hours Worked: " + firstHalf);
         System.out.println("Gross Salary: " + gross1);
         System.out.println("Net Salary: " + net1);
-        System.out.println("\nCutoff Date: " + monthName + "16 to " + monthDays);
+        System.out.println("Cutoff Date: " + monthName + " 16 to " + monthDays);
         System.out.println("Total Hours Worked: " + secondHalf);
         System.out.println("Gross Salary: " + gross2);
-        System.out.println("\n==== Breakdown of Deductions ====");
-        System.out.println("SSS: " + sss);
-        System.out.println("PhilHealth: " + phil);
-        System.out.println("Pag-IBIG: " + pagibig);
-        System.out.println("Tax: " + tax);
-        System.out.println("Total Deductions: " + totalDeductions);
+        System.out.println("Deductions");
+        System.out.println("    SSS: " + sss);
+        System.out.println("    PhilHealth: " + phil);
+        System.out.println("    Pag-IBIG: " + pagibig);
+        System.out.println("    Tax: " + tax);
+        System.out.println("    Total Deductions: " + totalDeductions);
         System.out.println("Net Salary: " + net2);
     }
     
