@@ -210,7 +210,7 @@ public class PayrollSystem {
                     String lastName = data[1];
                     String firstName = data[2];
                     String birthday = data[3];
-                    double hourlyRate = Double.parseDouble(data[18].replace("\"", "").trim());
+                    double hourlyRate = Double.parseDouble(data[18]);
                     found = true;
                     
                     // Loop from June to Recember
