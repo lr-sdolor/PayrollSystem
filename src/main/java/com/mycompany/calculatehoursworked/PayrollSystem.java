@@ -13,7 +13,7 @@ package com.mycompany.calculatehoursworked;
 import java.io.BufferedReader;
 // FileReader allows opening and reading files from the file system or computer
 import java.io.FileReader;
-// Duration allows calculation difference between two LocalTime objects or two times
+// Duration allows calculation difference between two LocalTime objects or two times (login or logout)
 import java.time.Duration;
 // LocalTime represents a specific time without date -- to be used for logging in and logging out like 8:30
 import java.time.LocalTime;
@@ -70,8 +70,8 @@ public class PayrollSystem {
     // grossSalary -> input parameter
     public static double computePhilHealth(double grossSalary) {
         double premium = grossSalary * 0.03; // compute 3% of monthly basic/gross
-        if (premium <= 1000) premium = 300; // check if computed premium is below minimum threshold then force minimum contribution rule
-        else if (premium >= 6000) premium = 1800; // check if computed premium exceeds maximum threshold then apply maximum contribution rule
+        if (premium <= 10000) premium = 300; // check if computed premium is below minimum threshold then force minimum contribution rule
+        else if (premium >= 60000) premium = 1800; // check if computed premium exceeds maximum threshold then apply maximum contribution rule
         return premium / 2; // employee only pays 50% of total premium
     }
 
