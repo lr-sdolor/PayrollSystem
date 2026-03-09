@@ -10,16 +10,7 @@ Synen Dolor
 - Lead Developer and Code Reviewer. Responsible for structuring the overall codebase and implementing the main program logic. Integrated the different components of the system, handled file processing, debugging, and ensured that the code followed a consistent structure. Also reviewed and refined the computation logic drafted during the planning phase.
 
 Moriah Edoc
-- Participated in drafting the initial logic for the hours computation and deduction rules during the planning stage and contributed ideas for how the calculations should be handled in the program.
-
-John Merick Carryle Tarcena
-- Assisted in the initial drafting of the computation and deduction logic and provided input during the early planning and review discussions.
-
-Yves Lauren Marcaida
-- Contributed to drafting the computation approach and participated in reviewing the proposed deduction logic during the design phase.
-
-Ma. Diana Salvidar
-- Assisted in outlining the hours computation and deduction rules and participated in discussions regarding how these should be applied in the system.
+- Participated in drafting the initial logic for the hours computation and deduction rules during the planning stage and contributed ideas for how the calculations should be handled in the program. Also reviewed and refined the computation logic drafted during the planning phase.
 
 MotorPH Payroll System Development Team
 
