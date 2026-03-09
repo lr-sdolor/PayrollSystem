@@ -29,6 +29,25 @@ import java.util.Scanner;
 // all program logic exists inside this class
 public class PayrollSystem {
     
+    // ==== GLOBAL VARIABLES ====
+    
+    // file paths used across the application
+    public static final String EMP_FILE = "src\\main\\java\\com\\mycompany\\calculatehoursworked\\employee_details.csv";
+    public static final String ATT_FILE = "src\\main\\java\\com\\mycompany\\calculatehoursworked\\attendance_record.csv";
+    
+    //centralize year value to avoid hardcoding
+    public static final int YEAR = 2024;
+    
+    // CSV column indices for consistent reference
+    public static final int COL_EMP_NO = 0;
+    public static final int COL_LAST_NAME = 1;
+    public static final int COL_FIRST_NAME = 2;
+    public static final int COL_BIRTHDAY = 3;
+    public static final int COL_HOURLY_RATE = 18;
+    public static final int COL_DATE = 3;
+    public static final int COL_LOGIN = 4;
+    public static final int COL_LOGOUT = 5;
+    
     // ==== METHODS ====
     // SSS Contribution
     // public -> accessible everywhere
@@ -237,17 +256,17 @@ public class PayrollSystem {
                 String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                 
                 // check if record belongs to selected employee
-                if(!data[0].equals(empNo)) continue;
+                if(!data[COL_EMP_NO].equals(empNo)) continue;
                 
                 // split data column (example: 08/23/2024)
-                String[] dateParts = data[3].split("/");
+                String[] dateParts = data[COL_DATE].split("/");
                 int recordMonth = Integer.parseInt(dateParts[0]); // extract month from date
                 int day = Integer.parseInt(dateParts[1]); // extract day
                 int year = Integer.parseInt(dateParts[2]); // extract year
-                if(year!=2024 || recordMonth != month) continue; // ignore records not from 2024 or not matching requested month
+                if(year!=YEAR || recordMonth != month) continue; // ignore records not from 2024 or not matching requested month
                 // convert login and logout time string into LocalTime object
-                LocalTime login = LocalTime.parse(data[4].trim(), timeFormat);
-                LocalTime logout = LocalTime.parse(data[5].trim(), timeFormat);
+                LocalTime login = LocalTime.parse(data[COL_LOGIN].trim(), timeFormat);
+                LocalTime logout = LocalTime.parse(data[COL_LOGOUT].trim(), timeFormat);
                 
                 // check if attendance belongs to first cut off
                 double hours = computeHours(login, logout);
@@ -271,20 +290,20 @@ public class PayrollSystem {
     
     // helper method for processing payroll for employee
     // for one employee across multiple months
-    public static void processPayrollForEmp(String empNo, String empFile, String attFile) {
+    public static void processPayrollForEmp(String empNo, String EMP_FILE, String ATT_FILE) {
         // try-with-resources automatically closes the file
-        try(BufferedReader br = new BufferedReader(new FileReader(empFile))) {
+        try(BufferedReader br = new BufferedReader(new FileReader(EMP_FILE))) {
             br.readLine(); //skip header
             String line; // variable that stores each line read from file
             boolean found = false; // flag used to check if employee exists
             while((line = br.readLine()) != null) { // loop through entire employee file
                 if(line.trim().isEmpty()) continue; // skip empty lines
                 String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // split csv row into columns safely because for some reason hourlyRate kept getting returned as "1"; reason being that the filereader parses it incorrectly due to the existing commas in some of the columns/indices in employee_details.csv 
-                if(data[0].equals(empNo)) { // check if employee number matches input
-                    String lastName = data[1]; // store employee last name
-                    String firstName = data[2];// store employee first name
-                    String birthday = data[3]; // store birthday
-                    double hourlyRate = Double.parseDouble(data[18]); // convert hourly rate text into double value
+                if(data[COL_EMP_NO].equals(empNo)) { // check if employee number matches input
+                    String lastName = data[COL_LAST_NAME]; // store employee last name
+                    String firstName = data[COL_FIRST_NAME];// store employee first name
+                    String birthday = data[COL_BIRTHDAY]; // store birthday
+                    double hourlyRate = Double.parseDouble(data[COL_HOURLY_RATE]); // convert hourly rate text into double value
                     found = true; // mark employee as found
                     
                     // Loop months from June to Recember
@@ -299,8 +318,8 @@ public class PayrollSystem {
                             case 12 -> "December";
                             default -> "Month "+month; // fallback safety case
                         };
-                        int monthDays = YearMonth.of(2024, month).lengthOfMonth(); // determine number of days in month
-                        double[] hours = computeAttendance(empNo, attFile, month); // compute attendance hours
+                        int monthDays = YearMonth.of(YEAR, month).lengthOfMonth(); // determine number of days in month
+                        double[] hours = computeAttendance(empNo, ATT_FILE, month); // compute attendance hours
                         displayPayroll(empNo, lastName, firstName, birthday, hours[0], hours[1], hourlyRate, monthName, monthDays); // display payroll using computed data
                     }
                     break; // stop searching once employee is processed
@@ -338,11 +357,6 @@ public class PayrollSystem {
             System.out.println("Incorrect username or password"); // deny system access
         }
         
-        // path location of employee information csv file
-        String empFile = "src\\main\\java\\com\\mycompany\\calculatehoursworked\\employee_details.csv";
-        // path location of attendance csv file
-        String attFile = "src\\main\\java\\com\\mycompany\\calculatehoursworked\\attendance_record.csv";
-        
         // employee flow
         if(username.equals("employee") && password.equals("12345")) { // check if logged-in user is an employee
             while(true) { // infinite loop until user exits
@@ -361,7 +375,7 @@ public class PayrollSystem {
                 boolean found = false; // flag to check if employee exists
                 
                 // opem employee file safely
-                try(BufferedReader br = new BufferedReader(new FileReader(empFile))) {
+                try(BufferedReader br = new BufferedReader(new FileReader(EMP_FILE))) {
                     br.readLine(); // skip header
                     String line;
                     while((line = br.readLine()) != null) { // continue reading until end of line
@@ -417,11 +431,11 @@ public class PayrollSystem {
                 if(subChoice == 1) {
                     System.out.print("Enter Employee Number: ");
                     String empNo  = scanner.nextLine();
-                    processPayrollForEmp(empNo, empFile, attFile); // call payroll processor method
+                    processPayrollForEmp(empNo, EMP_FILE, ATT_FILE); // call payroll processor method
                 }
                 
                 if(subChoice == 2) {
-                    try(BufferedReader br = new BufferedReader(new FileReader(empFile))) {
+                    try(BufferedReader br = new BufferedReader(new FileReader(EMP_FILE))) {
                         br.readLine(); // skip header
                         String line;
                         while((line = br.readLine()) != null) { // loop all employees
@@ -429,7 +443,7 @@ public class PayrollSystem {
                                 continue;
                             }
                             String empNo = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")[0]; // extract employee ids
-                            processPayrollForEmp(empNo, empFile, attFile); // call payroll processor method to process payroll for each employee
+                            processPayrollForEmp(empNo, EMP_FILE, ATT_FILE); // call payroll processor method to process payroll for each employee
                         }
                     } catch(Exception e) {
                         e.printStackTrace(); // error handling again
