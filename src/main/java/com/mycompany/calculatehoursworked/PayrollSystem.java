@@ -443,7 +443,7 @@ public class PayrollSystem {
     }
     
     // ==== MAIN PROGRAM ====
-    // executio of the Java program starts here
+    // execution of the Java program starts here
 
     /**
      *
