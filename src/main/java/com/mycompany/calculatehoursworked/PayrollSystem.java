@@ -6,7 +6,7 @@ package com.mycompany.calculatehoursworked;
 
 /**
  *
- * @author synen
+ * @author synen Moriah
  */
 // ===== IMPORTS =====
 // BufferedReader allows rading text files line by line
