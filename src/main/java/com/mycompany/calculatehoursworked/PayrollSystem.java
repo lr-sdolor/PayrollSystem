@@ -554,7 +554,6 @@ public class PayrollSystem {
                     System.out.println("Invalid choice. Please input 1-3 only.");
                     continue;
                 }
-                
                 if(subChoice == 1) {
                     System.out.println("=======================");
                     System.out.print("Enter Employee Number: ");
