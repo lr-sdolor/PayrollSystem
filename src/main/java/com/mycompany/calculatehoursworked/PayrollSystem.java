@@ -507,11 +507,11 @@ public class PayrollSystem {
                             // if(data[COL_EMP_NO].equals(empNo))
                             found = true; // employee exists
                             // display employee information
-                            System.out.println("\n===================================");
+                            System.out.println("=======================");
                             System.out.println("Employee # : " + data[0]);
                             System.out.println("Employee Name : " + data[1] + ", " + data[2]);
                             System.out.println("Birthday : " + data[3]);
-                            System.out.println("===================================");
+                            System.out.println("=======================");
                             break; // stop searching once found
                         }
                     }
@@ -527,6 +527,7 @@ public class PayrollSystem {
         // check if payroll staff logged in
         if(username.equals("payroll_staff") && password.equals("12345")) {
             while(true) {
+                System.out.println("=======================");
                 System.out.println("\n1. Process Payroll");
                 System.out.println("\n2. Exit Program");
                 int choice = scanner.nextInt();
