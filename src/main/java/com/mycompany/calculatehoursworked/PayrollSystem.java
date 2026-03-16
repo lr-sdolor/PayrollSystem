@@ -461,6 +461,7 @@ public class PayrollSystem {
         String password = scanner.nextLine().trim(); // read password input and remove extra spaces using trim()
         
         if(username.equals("employee") && password.equals("12345")) { // check if login matches employee account
+            System.out.println("=======================");
             System.out.println("Login Successful!"); // login success message
         }
         else if (username.equals("payroll_staff") && password.equals("12345")) { // check if login matches payroll staff account
@@ -474,15 +475,22 @@ public class PayrollSystem {
         if(username.equals("employee") && password.equals("12345")) { // check if logged-in user is an employee
             while(true) { // infinite loop until user exits
                 // show employee menu or options
+                System.out.println("=======================");
+                System.out.println("Choose the between 1 or 2:");
                 System.out.println("\n1. Enter Employee Number");
                 System.out.println("\n2. Exit Program");
+                System.out.println("=======================");
                 int choice = scanner.nextInt(); // read menu choice
                 scanner.nextLine(); // consume leftover newline character
                 
                 if(choice == 2) { // exit program if user selects option 2
                     break;
+                } else if(choice != 1 && choice != 2) {
+                    System.out.println("=======================");
+                    System.out.println("Invalid option. Please enter 1 or 2.");
+                    continue;
                 }
-                
+                System.out.println("=======================");                
                 System.out.print("Enter Employee Number: "); // ask for employee number
                 String empNo = scanner.nextLine(); // read employee number
                 boolean found = false; // flag to check if employee exists
@@ -513,6 +521,7 @@ public class PayrollSystem {
                 } catch(Exception e) {
                     e.printStackTrace();// print technical error info
                 }
+                break;
             }
         }
         // check if payroll staff logged in
