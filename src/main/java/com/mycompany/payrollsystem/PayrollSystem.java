@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.calculatehoursworked;
+package com.mycompany.payrollsystem;
 
 /**
  *
@@ -23,6 +23,8 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 // Scanner allows user input from keyboard
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 // ===== MAIN CLASS =====
 // declare a public class named PayrollSystem
@@ -32,6 +34,25 @@ import java.util.Scanner;
  *
  * @author synen
  */
+
+class Attendance {
+    String empNo;
+    int month;
+    int day;
+    int year;
+    LocalTime login;
+    LocalTime logout;
+    
+    public Attendance(String empNo, int month, int day, int year, LocalTime login, LocalTime logout) {
+        this.empNo = empNo;
+        this.month = month;
+        this.day = day;
+        this.year = year;
+        this.login = login;
+        this.logout = logout;
+    }
+}
+
 public class PayrollSystem {
     
     // ==== GLOBAL VARIABLES ====
@@ -41,12 +62,12 @@ public class PayrollSystem {
     /**
      *
      */
-    public static final String EMP_FILE = "src\\main\\java\\com\\mycompany\\calculatehoursworked\\employee_details.csv";
+    public static final String EMP_FILE = "src\\main\\java\\com\\mycompany\\payrollsystem\\employee_details.csv";
 
     /**
      *
      */
-    public static final String ATT_FILE = "src\\main\\java\\com\\mycompany\\calculatehoursworked\\attendance_record.csv";
+    public static final String ATT_FILE = "src\\main\\java\\com\\mycompany\\payrollsystem\\attendance_record.csv";
     
     //centralize year value to avoid hardcoding
 
@@ -96,6 +117,39 @@ public class PayrollSystem {
      *
      */
     public static final int COL_LOGOUT = 5;
+    
+    public static List<Attendance> loadAttendance(String ATT_FILE) {
+        List<Attendance> records = new ArrayList<>();
+        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("H:mm");
+        
+        try (BufferedReader br = new BufferedReader(new FileReader(ATT_FILE))) {
+            br.readLine();
+            String line;
+            
+            while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+                
+                String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                
+                String empNo = data[COL_EMP_NO];
+                
+                String[] dateParts = data[COL_DATE].split("/");
+                int month = Integer.parseInt(dateParts[0]);
+                int day = Integer.parseInt(dateParts[1]);
+                int year = Integer.parseInt(dateParts[2]);
+
+                LocalTime login = LocalTime.parse(data[COL_LOGIN].trim(), timeFormat);
+                LocalTime logout = LocalTime.parse(data[COL_LOGOUT].trim(), timeFormat);
+                
+                records.add(new Attendance(empNo, month, day, year, login, logout));
+            }
+        } catch (Exception e) {
+            System.out.println("Error loading attendance file.");
+            e.printStackTrace();
+        }
+        
+        return records;
+    }
     
     // ==== METHODS ====
     // SSS Contribution
@@ -327,66 +381,32 @@ public class PayrollSystem {
     /**
      *
      * @param empNo
-     * @param attFile
+     * @param records
      * @param month
      * @return
      */
     public static double[] computeAttendance(
             String empNo, // employee number to search
-            String attFile, // attendance csv file path
+            List<Attendance> records, // attendance csv file path
             int month) { // month beeing processed
         
         double firstHalf = 0; // stores total hours from day 1-15
         double secondHalf = 0; // stores total hours from day 16-end
         
-        // formatter used to interpret time text like "8:30"
-        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("H:mm");
-        
-        // try-with-resources automatically closes fiel after use
-        try(BufferedReader br = new BufferedReader(new FileReader(attFile))) {
+        for(Attendance rec : records) {
+            if (!rec.empNo.equals(empNo))
+                continue;
+            if (rec.year != YEAR || rec.month != month)
+                continue;
+            double hours = computeHours(rec.login, rec.logout);
             
-            br.readLine(); // read first line of csv (header row) and ignore it
-            String line; // variable that will store each line from file
-            
-            // read file continuously until no lines remain
-            while((line = br.readLine()) != null) {
-                if(line.trim().isEmpty()) continue; // skip empty lines
-                
-                // split csv values into columns
-                // regex prevents breaking commas inside quotes
-                String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-                
-                // check if record belongs to selected employee
-                if(!data[COL_EMP_NO].equals(empNo)) continue;
-                
-                // split data column (example: 08/23/2024)
-                String[] dateParts = data[COL_DATE].split("/");
-                int recordMonth = Integer.parseInt(dateParts[0]); // extract month from date
-                int day = Integer.parseInt(dateParts[1]); // extract day
-                int year = Integer.parseInt(dateParts[2]); // extract year
-                if(year!=YEAR || recordMonth != month) continue; // ignore records not from 2024 or not matching requested month
-                // convert login and logout time string into LocalTime object
-                LocalTime login = LocalTime.parse(data[COL_LOGIN].trim(), timeFormat);
-                LocalTime logout = LocalTime.parse(data[COL_LOGOUT].trim(), timeFormat);
-                
-                // check if attendance belongs to first cut off
-                double hours = computeHours(login, logout);
-                if(day <= 15) {
-                    firstHalf += hours; // add hours to first half total
-                } else {
-                    secondHalf += hours; // otherwise add hours to second half total
-                }
+            if (rec.day <= 15) {
+                firstHalf += hours;
+            } else {
+                secondHalf += hours;
             }
-        } catch(Exception e) { // catch errors like missing file or bad data
-            System.out.println("Error reading attendance file for month " + month); // print readbale error message
-            e.printStackTrace(); // print detailed technical error for debugging
         }
-        
-        // return both cutoff totals as an array
-        return new double[] {
-            firstHalf, // index 0
-            secondHalf // index 1
-        };
+        return new double[]{firstHalf, secondHalf};
     }
     
     // helper method for processing payroll for employee
@@ -396,9 +416,9 @@ public class PayrollSystem {
      *
      * @param empNo
      * @param EMP_FILE
-     * @param ATT_FILE
+     * @param records
      */
-    public static void processPayrollForEmp(String empNo, String EMP_FILE, String ATT_FILE) {
+    public static void processPayrollForEmp(String empNo, String EMP_FILE, List<Attendance> records) {
         // try-with-resources automatically closes the file
         try(BufferedReader br = new BufferedReader(new FileReader(EMP_FILE))) {
             br.readLine(); //skip header
@@ -427,7 +447,7 @@ public class PayrollSystem {
                             default -> "Month "+month; // fallback safety case
                         };
                         int monthDays = YearMonth.of(YEAR, month).lengthOfMonth(); // determine number of days in month
-                        double[] hours = computeAttendance(empNo, ATT_FILE, month); // compute attendance hours
+                        double[] hours = computeAttendance(empNo, records, month); // compute attendance hours
                         displayPayroll(empNo, lastName, firstName, birthday, hours[0], hours[1], hourlyRate, monthName, monthDays); // display payroll using computed data
                     }
                     break; // stop searching once employee is processed
@@ -452,6 +472,7 @@ public class PayrollSystem {
     public static void main(String[] args) {
         // create scanner object to allow keyboard input
         Scanner scanner = new Scanner(System.in);
+        List<Attendance> attendanceRecords = loadAttendance(ATT_FILE);
         
         // display login system title
         System.out.println("==== MOTORPH LOGIN ====");
@@ -544,7 +565,7 @@ public class PayrollSystem {
                 if(subChoice == 1) {
                     System.out.print("Enter Employee Number: ");
                     String empNo  = scanner.nextLine();
-                    processPayrollForEmp(empNo, EMP_FILE, ATT_FILE); // call payroll processor method
+                    processPayrollForEmp(empNo, EMP_FILE, attendanceRecords); // call payroll processor method
                 }
                 
                 if(subChoice == 2) {
@@ -556,7 +577,7 @@ public class PayrollSystem {
                                 continue;
                             }
                             String empNo = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")[0]; // extract employee ids
-                            processPayrollForEmp(empNo, EMP_FILE, ATT_FILE); // call payroll processor method to process payroll for each employee
+                            processPayrollForEmp(empNo, EMP_FILE, attendanceRecords); // call payroll processor method to process payroll for each employee
                         }
                     } catch(Exception e) {
                         e.printStackTrace(); // error handling again
