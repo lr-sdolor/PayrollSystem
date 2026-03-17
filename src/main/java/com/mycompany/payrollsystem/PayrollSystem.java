@@ -6,7 +6,7 @@ package com.mycompany.payrollsystem;
 
 /**
  *
- * @author synen
+ * @author synen, re-organized version by Mors
  */
 // ===== IMPORTS =====
 // BufferedReader allows rading text files line by line
