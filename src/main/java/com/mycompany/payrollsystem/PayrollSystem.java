@@ -585,7 +585,7 @@ public class PayrollSystem {
             handleEmployeeFlow(scanner, employees);
         }
         else if (username.equals("payroll_staff") && password.equals("12345")) {
-            System.out.println("Login Sucessful!");
+            System.out.println("Login Successful!");
             handlePayrollFlow(scanner, employees, attendanceRecords);
         }
         else {
