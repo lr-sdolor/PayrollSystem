@@ -380,7 +380,7 @@ public class PayrollSystem {
         System.out.println("Employee No.: " + empNo);
         System.out.println("Employee: " + lastName + ", " + firstName);
         System.out.println("Birthday: " + birthday);
-        System.out.println("\n===== Cutoff Date: " + monthName + " 1 to 15 ====");
+        System.out.println("\n===== Cutoff Date: " + monthName + " 1 to 15 =====");
         System.out.println("Total Hours Worked: " + firstHalf);
         System.out.println("Gross Salary: " + gross1);
         System.out.println("Net Salary: " + net1);
@@ -488,92 +488,84 @@ public class PayrollSystem {
     
     public static void handleEmployeeFlow(Scanner scanner, List<String[]> employees) {
 
-        while(true) {
-            System.out.println("===================================");
-            System.out.println("[1] Enter Employee Number");
-            System.out.println("[2] Exit Program");
-            System.out.print("Enter Choice: ");
-            int choice = getMenuChoice(scanner, 1, 2);
-
-            if (choice == 2) {
-                System.out.println("Exiting employee menu...");
-                break;
-            }
-
+        // Employee ID validation loop
+        String empNo;
+        String[] emp;
+        System.out.println("===================================");    
+        while (true) {
             System.out.print("Enter Employee Number: ");
-            String empNo = scanner.nextLine();
+            empNo = scanner.nextLine();
 
-            String[] emp = getEmployeeData(employees, empNo);
+            emp = getEmployeeData(employees, empNo);
 
-            if(emp != null) {
-                System.out.println("===================================");
-                System.out.println("Employee # : " + emp[0]);
-                System.out.println("Employee Name : " + emp[1] + ", " + emp[2]);
-                System.out.println("Birthday : " + emp[3]);
-                System.out.println("===================================");
+            if (emp != null) {
+                break; // valid employee found
             } else {
-                System.out.println("Employee number does not exist.");
+                System.out.println("Invalid employee number. Please try again.");
             }
         }
-    }    
+
+        // ✅ Display employee details
+        System.out.println("===================================");
+        System.out.println("Employee # : " + emp[0]);
+        System.out.println("Employee Name : " + emp[1] + ", " + emp[2]);
+        System.out.println("Birthday : " + emp[3]);
+
+    }  
 
     public static void handlePayrollFlow(Scanner scanner, List<String[]> employees, List<Attendance> records) {
         while(true) {
             System.out.println("===================================");
             System.out.println("[1] Process Payroll");
             System.out.println("[2] Exit Program");
-            System.out.print("Enter Choice: ");
 
             int choice = getMenuChoice(scanner, 1, 2);
 
             if (choice == 2) {
-                System.out.println("Exiting payroll menu...");
+                System.out.println("===================================");
+                System.out.println("Exiting program...");
                 break;
             }
-            
             System.out.println("===================================");
             System.out.println("[1] One Employee");
             System.out.println("[2] All Employees");
             System.out.println("[3] Exit Program");
-            System.out.print("Enter Choice: ");
 
-            int subChoice = scanner.nextInt();
-            scanner.nextLine();
+            int subChoice = getMenuChoice(scanner, 1, 3);
 
-            if(subChoice == 3) break;
-
-            if(subChoice == 1) {
+            if (subChoice == 3) {
                 System.out.println("===================================");
-                System.out.print("Enter Employee Number: ");
-                String empNo = scanner.nextLine();
-
-                String[] emp = getEmployeeData(employees, empNo);
-
-                if(emp != null)
-                    processPayrollForEmployee(emp, records);
-                else
-                    System.out.println("Employee number does not exist.");
+                System.out.println("Exiting program...");
+                break;
             }
 
-            if(subChoice == 2) {
+            if (subChoice == 1) {
+
+                String empNo;
+                String[] emp;
+                System.out.println("===================================");
+                while (true) {
+                    System.out.print("Enter Employee Number: ");
+                    empNo = scanner.nextLine();
+
+                    emp = getEmployeeData(employees, empNo);
+
+                    if (emp != null) {
+                        break; // valid
+                    } else {
+                        System.out.println("Employee number does not exist. Please try again.");
+                    }
+                }
+
+                processPayrollForEmployee(emp, records);
+            }
+
+            if (subChoice == 2) {
                 processPayrollForAllEmployees(employees, records);
             }
         }
-    }    
-    // ==== MAIN PROGRAM ====
-    // execution of the Java program starts here
-
-    /**
-     *
-     * @param args
-     */
-
-    private static boolean authenticate(String username, String password) {
-        return (username.equals("employee") && password.equals("12345")) ||
-               (username.equals("payroll_staff") && password.equals("12345"));
     }
-    
-    
+
     //Helper method to validate input for choices for menu options
     public static int getMenuChoice(Scanner scanner, int min, int max) {
     int choice;
@@ -597,6 +589,20 @@ public class PayrollSystem {
             }
         }
     }
+    
+    // ==== MAIN PROGRAM ====
+    // execution of the Java program starts here
+
+    /**
+     *
+     * @param args
+     */
+
+     private static boolean authenticate(String username, String password) {
+        return (username.equals("employee") && password.equals("12345")) ||
+               (username.equals("payroll_staff") && password.equals("12345"));
+    }
+    
     //Main Method
     
     public static void main(String[] args) {
@@ -614,15 +620,17 @@ public class PayrollSystem {
             String password = scanner.nextLine().trim();
 
             if (authenticate(username, password)) {
-                System.out.println("Login Successful!"); // show success message
+                System.out.println("Login Successful!");// show success message
 
                 // continue to employee menu if employee logs in
                 if (username.equals("employee")) {
                     handleEmployeeFlow(scanner, employees);
+                    return;
                 }
                 // continue to payroll menu if payroll staff logs in
                 else if (username.equals("payroll_staff")) {
                     handlePayrollFlow(scanner, employees, attendanceRecords);
+                    return;
                 }
             } else {
                 System.out.println("Incorrect username or password"); // show error message
